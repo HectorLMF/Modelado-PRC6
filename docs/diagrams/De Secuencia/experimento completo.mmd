@@ -1,0 +1,84 @@
+sequenceDiagram
+    participant Usuario
+    participant Main
+    participant Scanner
+    participant ExperimentManager
+    participant Dataset
+    participant KNNClassifier
+
+    Usuario->>Main: choose(5)
+    note right of Main: Usuario selecciona opción de experimento
+
+    Main->>Scanner: nextFloat()
+    note right of Scanner: Lee el ratio de test
+
+    Scanner-->>Main: testRatio
+    note right of Main: Main recibe porcentaje de prueba
+
+    Main->>Scanner: nextLine()
+    note right of Scanner: Consume salto de línea
+
+    Main->>Scanner: nextLine()
+    note right of Scanner: Lee 's' o 'n' para aleatoriedad
+
+    Scanner-->>Main: randomSplit
+    note right of Main: Main sabe si barajar o no
+
+    Main->>Scanner: nextInt()
+    note right of Scanner: Lee la semilla entera
+
+    Scanner-->>Main: seedExp
+    note right of Main: Main recibe semilla para reproducibilidad
+
+    Main->>ExperimentManager: splitDatasetRatio(testRatio, randomSplit, seedExp)
+    note right of ExperimentManager: Genera trainSet y testSet
+
+    ExperimentManager->>Dataset: getInstances()
+    note right of Dataset: Obtiene instancias originales
+
+    Dataset-->>ExperimentManager: List<Instance>
+    note right of ExperimentManager: Recibe todas las instancias
+
+    alt randomSplit == true
+        ExperimentManager->>ExperimentManager: shuffle(instancias, seedExp)
+        note right of ExperimentManager: Baraja la lista con semilla
+    else
+        ExperimentManager->>ExperimentManager: hashSplit(instancias, testRatio)
+        note right of ExperimentManager: División determinística
+    end
+
+    ExperimentManager->>ExperimentManager: asignar train/test
+    note right of ExperimentManager: Llena trainSet y testSet respectivos
+
+    ExperimentManager-->>Main: (void)
+    note right of Main: Split preparado
+
+    Main->>ExperimentManager: runExperiment(classifier, datasetPath)
+    note right of ExperimentManager: Inicia clasificación y evaluación
+
+    ExperimentManager->>Dataset: getInstances()
+    note right of Dataset: Usa testSet internamente
+
+    Dataset-->>ExperimentManager: testInstances
+    note right of ExperimentManager: Recibe subconjunto de prueba
+
+    loop Cada instancia de testSet
+        ExperimentManager->>KNNClassifier: classify(inst)
+        note right of KNNClassifier: Clasifica instancia de prueba
+
+        KNNClassifier-->>ExperimentManager: clasePredicha
+        note right of ExperimentManager: Recibe predicción
+
+        ExperimentManager->>ExperimentManager: actualizarMatriz(inst.claseReal, clasePredicha)
+        note right of ExperimentManager: Incrementa celda de confusión
+
+    end
+
+    ExperimentManager->>ExperimentManager: calcularPrecision()
+    note right of ExperimentManager: accuracy = correct/total
+
+    ExperimentManager-->>Main: (void)
+    note right of Main: Experimento finalizado
+
+    Main-->>Usuario: println(matriz + precision)
+    note right of Usuario: Muestra resultados en consola

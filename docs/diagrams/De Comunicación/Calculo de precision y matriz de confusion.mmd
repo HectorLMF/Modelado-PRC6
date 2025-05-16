@@ -1,0 +1,69 @@
+graph TD
+    Start[Inicio del Programa]
+    User[Usuario]
+    Main[Main]
+    Menu[Mostrar Menú Principal]
+    SelectOption[Seleccionar Opción]
+
+    LoadData[Cargar Dataset desde archivo]
+    LoadInstances[Obtener Instancias]
+    SetK[Configurar Valor de K]
+    SetDistance[Seleccionar Métrica de Distancia]
+    SetWeight[Seleccionar Estrategia de Voto]
+
+    ClassifyManual[Clasificación Manual de Instancia]
+    InputInstance[Ingresar Datos de Instancia]
+    RunClassifier[Ejecutar KNN]
+    ShowPrediction[Mostrar Predicción]
+
+    SplitDataset[Dividir Dataset en Entrenamiento y Prueba]
+    Shuffle[Reordenar Aleatoriamente]
+    AssignSets[Asignar a Train y Test]
+
+    RunExperiment[Ejecutar Clasificación en Test Set]
+    ClassifyInstance[Clasificar Instancia de Test]
+    ComputeDistance[Calcular Distancia]
+    ComputeWeight[Calcular Peso]
+    PredictClass[Predecir Clase]
+    UpdateConfusion[Actualizar Matriz de Confusión]
+    ComputeAccuracy[Calcular Precisión]
+
+    ShowResults[Mostrar Resultados Finales]
+
+    Exit[Fin del Programa]
+
+    Start --> Main
+    Main --> Menu
+    Menu --> SelectOption
+
+    SelectOption -->|Opción 1| LoadData
+    LoadData --> LoadInstances
+    LoadInstances --> Main
+
+    SelectOption -->|Opción 3| SetK
+    SetK --> SetDistance
+    SetDistance --> SetWeight
+    SetWeight --> Main
+
+    SelectOption -->|Opción 4| ClassifyManual
+    ClassifyManual --> InputInstance
+    InputInstance --> RunClassifier
+    RunClassifier --> ShowPrediction
+    ShowPrediction --> Main
+
+    SelectOption -->|Opción 5| SplitDataset
+    SplitDataset --> Shuffle
+    Shuffle --> AssignSets
+    AssignSets --> RunExperiment
+
+    RunExperiment --> ClassifyInstance
+    ClassifyInstance --> ComputeDistance
+    ComputeDistance --> ComputeWeight
+    ComputeWeight --> PredictClass
+    PredictClass --> UpdateConfusion
+    UpdateConfusion --> RunExperiment
+    RunExperiment --> ComputeAccuracy
+    ComputeAccuracy --> ShowResults
+    ShowResults --> Main
+
+    SelectOption -->|Opción 0| Exit
