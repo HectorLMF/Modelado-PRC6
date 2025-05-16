@@ -1,129 +1,150 @@
-***PRC-6: Sistema de Gestión de Experimentos KNN***
+# Sistema de clasificación k-NN y modelado UML  
+## Prácticas PRC-6 y PRC-7  
 
-***Práctica 6 – Diagramas UML y Generación Aleatoria de Conjuntos Train/Test***
+Este proyecto combina los desarrollos realizados en las prácticas PRC-6 y PRC-7, centradas en el diseño, implementación y documentación de un sistema de clasificación basado en el algoritmo k-NN (*k-Nearest Neighbors*), junto con su correspondiente modelado mediante diagramas UML. Todo el código y documentación están integrados en un único repositorio.
 
 
-***1. Objetivos***
+## 🧪 PRC-6 – Gestión y ejecución de experimentos
 
-Modelar mediante diagramas UML los procesos clave del sistema de clasificación k-NN:
+### Objetivo  
+Diseñar un sistema capaz de gestionar experimentos reproducibles con un clasificador k-NN sencillo, separando adecuadamente los conjuntos de entrenamiento y prueba, e implementando componentes reutilizables.
 
-Actividades de carga, selección de vecinos, votación, generación de splits y evaluación.
+### Componentes implementados
 
-Diagrama de estado para el preprocesado de datos.
+- `ExperimentManager`:
+  - Divide el conjunto de datos de forma aleatoria pero determinista (usando semillas).
+  - Guarda los subconjuntos generados en archivos CSV.
+  - Ejecuta experimentos usando el clasificador k-NN.
+  - Muestra por consola:
+    - Predicciones
+    - Matriz de confusión
+    - Precisión predictiva
+  - Genera informes en archivos `.txt`.
 
-Implementar en Java la generación reproducible de conjuntos de entrenamiento y prueba.
+- `DataSet`:
+  - Clase que encapsula la carga, almacenamiento y manipulación de datos.
+  - Soporta CSV y estructuras internas para atributos y clases.
 
-Organizar la práctica en un repositorio independiente (PRC-6).
+### Diagramas UML asociados
 
+📂 `/docs/diagrams/deActividad`:  
+- División aleatoria de datos  
+- Ejecución del experimento  
+- Generación de informe  
 
-***2. Diagramas de Actividad y Estado:***
+📂 `/docs/diagrams/deEstado`:  
+- Estados del gestor de experimentos  
+- Flujo de transición entre carga, ejecución y análisis  
 
-Situados en este repositorio en:
+---
 
-- *Actividad*: /docs/diagrams/deActvidad
-- *De estado*: /docs/diagrams/deEstado
+## 🧠 PRC-7 – Clasificador k-NN y modelado detallado
 
+### Objetivo  
+Ampliar el sistema con la implementación de un clasificador k-NN configurable y modelar su comportamiento mediante diagramas de interacción.
 
-***3. Implementación Java: ExperimentManager***
+### Componentes nuevos
 
-La clase ExperimentManager dispone de los siguientes atributos internos:
+- `KNNClassifier`:
+  - Permite configurar el valor de *k* y la métrica de distancia (Euclidiana, Manhattan, etc.).
+  - Clasifica nuevas instancias mediante votación de los *k* vecinos más cercanos.
+  - Se integra con `ExperimentManager`.
 
-Dataset dataset: Referencia al dataset original con instancias y metadatos.
+- Ampliación de `ExperimentManager`:
+  - Llama al clasificador para cada instancia del conjunto de prueba.
+  - Calcula la matriz de confusión y precisión global.
 
-List<Instance> trainSet: Lista de instancias asignadas al conjunto de entrenamiento.
+### Diagramas UML asociados
 
-List<Instance> testSet: Lista de instancias asignadas al conjunto de prueba.
+📁 `/docs/`:
 
-Y los siguientes métodos públicos clave:
+📌 `sequence_classification_instance.svg`:  
+➡️ Describe el proceso paso a paso desde que una instancia es enviada al clasificador hasta que se obtiene la predicción.
 
-public ExperimentManager(Dataset dataset)
+📌 `sequence_dataset_split.svg`:  
+➡️ Muestra cómo se divide el dataset original en entrenamiento y prueba mediante una semilla.
 
-Función: Constructor que inicializa la referencia al dataset y crea listas vacías para trainSet y testSet.
+📌 `communication_confusion_matrix.svg`:  
+➡️ Describe cómo se calculan y representan los resultados tras ejecutar el experimento completo.
 
-public void splitDatasetRatio(float testRatio, boolean random, int seed)
+---
 
-Parámetros:
+## ✅ Conclusiones
 
-testRatio: porcentaje del dataset que se dedicará a prueba (valor entre 0 y 1).
+- Se ha logrado un sistema modular y extensible, con componentes bien separados y documentados.
+- Los diagramas UML aportan una visión clara de los flujos del sistema y su comportamiento.
+- La implementación es flexible y permite realizar múltiples experimentos modificando fácilmente parámetros y datos.
 
-random: si true, mezcla aleatoriamente las instancias antes de dividir.
+---
 
-seed: semilla para el generador aleatorio (asegura reproducibilidad).
+## 🛠️ Herramientas utilizadas
 
-Funcionamiento:
+- Python 3.x
+- Bibliotecas:
+  - `pandas`, `numpy` (para procesamiento de datos)
+  - `matplotlib` (para visualización si se amplía)
+- Herramientas UML:
+  - PlantUML y Lucidchart (según diagrama)
 
-Duplica todas las instancias del dataset en una lista local.
+---
 
-Calcula el tamaño de la parte de prueba (testSize = total * testRatio).
+## 📜 Licencia
 
-Si random es true, aplica Collections.shuffle con un Random(seed).
+Este proyecto está licenciado bajo MIT License.  
+Consulta el archivo `LICENSE` para más información.
 
-Asigna las primeras (total - testSize) instancias a trainSet y el resto a testSet.
+---## 🧪 PRC-6 – Gestión y ejecución de experimentos
 
-public String[] saveSplit()
+### Objetivo  
+Diseñar un sistema capaz de gestionar experimentos reproducibles con un clasificador k-NN sencillo, separando adecuadamente los conjuntos de entrenamiento y prueba, e implementando componentes reutilizables.
 
-Función: Guarda trainSet y testSet en archivos CSV dentro de datasets/ con nombre basado en timestamp.
+### Componentes implementados
 
-Retorno: Un arreglo de dos rutas [pathTrain, pathTest].
+- `ExperimentManager`:
+  - Divide el conjunto de datos de forma aleatoria pero determinista (usando semillas).
+  - Guarda los subconjuntos generados en archivos CSV.
+  - Ejecuta experimentos usando el clasificador k-NN.
+  - Muestra por consola:
+    - Predicciones
+    - Matriz de confusión
+    - Precisión predictiva
+  - Genera informes en archivos `.txt`.
 
-Interno: Invoca al método privado saveDataset para escribir cada lista.
+- `DataSet`:
+  - Clase que encapsula la carga, almacenamiento y manipulación de datos.
+  - Soporta CSV y estructuras internas para atributos y clases.
 
-private void saveDataset(List<Instance> list, String path)
+### Diagramas UML asociados
 
-Parámetros:
+📂 `/docs/diagrams/deActividad`:  
+- División aleatoria de datos  
+- Ejecución del experimento  
+- Generación de informe  
 
-list: lista de instancias a guardar.
+📂 `/docs/diagrams/deEstado`:  
+- Estados del gestor de experimentos  
+- Flujo de transición entre carga, ejecución y análisis  
 
-path: ruta y nombre del archivo de salida.
+---
 
-Funcionamiento:
+## 🧠 PRC-7 – Clasificador k-NN y modelado detallado
 
-Escribe la línea de cabeceras obteniendo los nombres de atributos desde dataset.getAttributes().
+### Objetivo  
+Ampliar el sistema con la implementación de un clasificador k-NN configurable y modelar su comportamiento mediante diagramas de interacción.
 
-Recorre cada Instance y escribe los valores separados por comas.
+### Componentes nuevos
 
-Maneja IOException imprimiendo un mensaje de error si ocurre.
+- `KNNClassifier`:
+  - Permite configurar el valor de *k* y la métrica de distancia (Euclidiana, Manhattan, etc.).
+  - Clasifica nuevas instancias mediante votación de los *k* vecinos más cercanos.
+  - Se integra con `ExperimentManager`.
 
-public void runExperiment(KNNClassifier clf, String originalDatasetPath)
+- Ampliación de `ExperimentManager`:
+  - Llama al clasificador para cada instancia del conjunto de prueba.
+  - Calcula la matriz de confusión y precisión global.
 
-Parámetros:
+### Diagramas UML asociados
 
-clf: objeto KNNClassifier configurado previamente.
+📁 `/docs/`: Contiene los 2 informes de las practicas 6 y 7 asi como los diagramas
 
-originalDatasetPath: ruta del archivo CSV original para referencia en el informe.
-
-Funcionamiento:
-
-Inicializa contadores para calcular precisión y una matriz de confusión de tamaño [nClases][nClases].
-
-Recorre testSet, clasifica cada instancia y actualiza contadores y matriz.
-
-Calcula accuracy = correct / total.
-
-Imprime por consola la matriz de confusión y la precisión.
-
-Pregunta al usuario si desea guardar los datasets de train/test (saveSplit).
-
-Llama a generateExperimentReport para crear un archivo de texto con todos los detalles.
-
-private void generateExperimentReport(...)
-
-Función: Construye y guarda en experiments_output/ un informe con:
-
-Fecha y hora.
-
-Ruta del CSV original y de los splits (si se guardaron).
-
-Parámetros del clasificador (k, métrica, ponderación, regla).
-
-Precisión y matriz de confusión.
-
-Manejo de I/O: Crea el directorio si no existe y captura excepciones de escritura.
-
-Con esto, ExperimentManager ofrece una API sencilla para:
-
-Dividir datasets (con o sin aleatoriedad).
-
-Persistir conjuntos de entrenamiento/prueba.
-
-Ejecutar y documentar experimentos KNN.
+---
