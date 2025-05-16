@@ -1,8 +1,6 @@
-PRC-6: Sistema de Gestión de Experimentos KNN
+***PRC-6: Sistema de Gestión de Experimentos KNN
+Práctica 6 – Diagramas UML y Generación Aleatoria de Conjuntos Train/Test ***
 
-Práctica 6 – Diagramas UML y Generación Aleatoria de Conjuntos Train/Test
-
-Grado en Ingeniería Informática | Modelado de Sistemas Software
 
 1. Objetivos
 
