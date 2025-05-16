@@ -1,83 +1,130 @@
-# Clasificador k-NN con Configuración Avanzada
+PRC-6: Sistema de Gestión de Experimentos KNN
 
-Este proyecto implementa un **clasificador k-NN** altamente configurable. Permite seleccionar **métricas de distancia**, **pesado de vecinos**, **reglas de clasificación**, **normalización de datos**, y **almacenar experimentos para replicación posterior**. También se genera automáticamente un **informe detallado** con la configuración del experimento y la matriz de confusión.
+Práctica 6 – Diagramas UML y Generación Aleatoria de Conjuntos Train/Test
 
-## 🚀 Uso del programa
+Grado en Ingeniería Informática | Modelado de Sistemas Software
 
-1. **Ejecutar `Main.java`** en IntelliJ IDEA o cualquier entorno compatible con Java.
-2. **Seleccionar el dataset de entrada** (Ej.: `iris.csv`, `glass.csv`).
-3. **Elegir la normalización**: `RAW`, `MIN-MAX`, `Z-SCORE`.
-4. **Configurar el valor de `k`** para el algoritmo k-NN.
-5. **Seleccionar la métrica de distancia** (`EuclideanDistance`, `ManhattanDistance`, `ChebyshevDistance`).
-6. **Seleccionar la estrategia de pesado de vecinos** (`EqualWeighting`, `DistanceInverseWeighting`, `RankBasedWeighting`).
-7. **Elegir el algoritmo de votación** (`MajorityVote`, `ThresholdVote`).
-8. **Ingresar una nueva instancia para clasificación** (valores sin la etiqueta de clase).
-9. **Ejecutar el experimento**, mostrando la **precisión y matriz de confusión**.
-10. **Guardar los conjuntos de entrenamiento y prueba** en `datasets/` con nombres basados en la fecha y hora.
-11. **Generar un informe del experimento** en `experiments_output/`, registrando:
-    - Ruta del dataset original
-    - Ruta de los conjuntos generados (`train.csv`, `test.csv`)
-    - Parámetros del algoritmo (`k`, métrica, pesado, regla de clasificación)
-    - Matriz de confusión y precisión
+1. Objetivos
 
-## 📂 Estructura del Código
+Modelar mediante diagramas UML los procesos clave del sistema de clasificación k-NN:
 
-El programa está compuesto por varias clases organizadas en paquetes.
+Actividades de carga, selección de vecinos, votación, generación de splits y evaluación.
 
-### **Paquete `model` (Gestión de Datos)**  
-Define la estructura de los datos utilizados en el clasificador.
+Diagrama de estado para el preprocesado de datos.
 
-- `Attribute`: Representa un atributo en el dataset con nombre, tipo y si es de clase.
-- `Instance`: Representa una instancia de datos con valores asociados.
-- `Dataset`: Almacena y maneja el conjunto de datos. Incluye normalización y extracción de estadísticas de atributos.
-- `NormalizationMode`: Enumeración que define los tipos de normalización disponibles (`RAW`, `MIN_MAX`, `Z_SCORE`).
+Implementar en Java la generación reproducible de conjuntos de entrenamiento y prueba.
 
-### **Paquete `classification` (Reglas de Clasificación)**  
+Organizar la práctica en un repositorio independiente (PRC-6).
 
-- `ClassificationRule`: Interfaz para definir reglas de clasificación.
-- `MajorityVote`: Usa mayoría simple para determinar la clase.
-- `ThresholdVote`: Requiere un umbral mínimo de votos para aceptar una clase.
 
-### **Paquete `distance` (Métricas de Distancia)**  
+2. Diagramas de Actividad y Estado:
 
-- `DistanceMetric`: Interfaz que define una métrica de distancia.
-- `EuclideanDistance`: Implementa la distancia Euclidiana.
-- `ManhattanDistance`: Implementa la distancia Manhattan.
-- `ChebyshevDistance`: Implementa la distancia Chebyshev.
+Situados en este repositorio en:
 
-### **Paquete `weighting` (Pesado de Vecinos)**  
+- *Actividad*: /docs/diagrams/deActvidad
+- *De estado*: /docs/diagrams/deEstado
 
-- `CaseWeightingStrategy`: Interfaz para estrategias de pesado de vecinos.
-- `EqualWeighting`: Todos los vecinos tienen el mismo peso.
-- `DistanceInverseWeighting`: Peso inversamente proporcional a la distancia.
-- `RankBasedWeighting`: Asigna pesos decrecientes según el orden del vecino.
 
-### **Paquete `knn` (Clasificador k-NN)**  
+3. Implementación Java: ExperimentManager
 
-- `KNNClassifier`: Implementa el algoritmo k-NN con múltiples configuraciones.
-  - `k`: Número de vecinos considerados.
-  - `distanceMetric`: Métrica de distancia usada.
-  - `classificationRule`: Algoritmo de votación.
-  - `caseWeightingStrategy`: Estrategia de pesado de vecinos.
-  - Métodos: `classify(instance)`, `setK(k)`, entre otros.
+La clase ExperimentManager dispone de los siguientes atributos internos:
 
-### **Paquete `experiment` (Gestión de Experimentos)**  
+Dataset dataset: Referencia al dataset original con instancias y metadatos.
 
-- `ExperimentManager`: Administra la generación y ejecución de experimentos.
-  - `splitDatasetRatio(testRatio, random, seed)`: Divide el dataset en entrenamiento y prueba.
-  - `saveSplit()`: Guarda los conjuntos en `datasets/` con nombres basados en la fecha y hora.
-  - `runExperiment()`: Ejecuta el experimento y muestra resultados.
-  - `generateExperimentReport()`: Genera un informe del experimento en `experiments_output/`.
+List<Instance> trainSet: Lista de instancias asignadas al conjunto de entrenamiento.
 
-## 🛠 Instalación y Ejecución  
+List<Instance> testSet: Lista de instancias asignadas al conjunto de prueba.
 
-1. **Descargar los datasets** (`glass.csv`, `iris.csv`) y guardarlos en `datasets/`.
-2. **Compilar el código** usando:  
-   ```bash
-   javac -d bin $(find . -name "*.java")
-3. **Ejecutar el programa** con:
-  java -cp bin app.Main
+Y los siguientes métodos públicos clave:
 
-4. Seguir las instrucciones en consola para configurar el clasificador.
-5. Visualizar los resultados y el informe generado en experiments_output/.
+public ExperimentManager(Dataset dataset)
 
+Función: Constructor que inicializa la referencia al dataset y crea listas vacías para trainSet y testSet.
+
+public void splitDatasetRatio(float testRatio, boolean random, int seed)
+
+Parámetros:
+
+testRatio: porcentaje del dataset que se dedicará a prueba (valor entre 0 y 1).
+
+random: si true, mezcla aleatoriamente las instancias antes de dividir.
+
+seed: semilla para el generador aleatorio (asegura reproducibilidad).
+
+Funcionamiento:
+
+Duplica todas las instancias del dataset en una lista local.
+
+Calcula el tamaño de la parte de prueba (testSize = total * testRatio).
+
+Si random es true, aplica Collections.shuffle con un Random(seed).
+
+Asigna las primeras (total - testSize) instancias a trainSet y el resto a testSet.
+
+public String[] saveSplit()
+
+Función: Guarda trainSet y testSet en archivos CSV dentro de datasets/ con nombre basado en timestamp.
+
+Retorno: Un arreglo de dos rutas [pathTrain, pathTest].
+
+Interno: Invoca al método privado saveDataset para escribir cada lista.
+
+private void saveDataset(List<Instance> list, String path)
+
+Parámetros:
+
+list: lista de instancias a guardar.
+
+path: ruta y nombre del archivo de salida.
+
+Funcionamiento:
+
+Escribe la línea de cabeceras obteniendo los nombres de atributos desde dataset.getAttributes().
+
+Recorre cada Instance y escribe los valores separados por comas.
+
+Maneja IOException imprimiendo un mensaje de error si ocurre.
+
+public void runExperiment(KNNClassifier clf, String originalDatasetPath)
+
+Parámetros:
+
+clf: objeto KNNClassifier configurado previamente.
+
+originalDatasetPath: ruta del archivo CSV original para referencia en el informe.
+
+Funcionamiento:
+
+Inicializa contadores para calcular precisión y una matriz de confusión de tamaño [nClases][nClases].
+
+Recorre testSet, clasifica cada instancia y actualiza contadores y matriz.
+
+Calcula accuracy = correct / total.
+
+Imprime por consola la matriz de confusión y la precisión.
+
+Pregunta al usuario si desea guardar los datasets de train/test (saveSplit).
+
+Llama a generateExperimentReport para crear un archivo de texto con todos los detalles.
+
+private void generateExperimentReport(...)
+
+Función: Construye y guarda en experiments_output/ un informe con:
+
+Fecha y hora.
+
+Ruta del CSV original y de los splits (si se guardaron).
+
+Parámetros del clasificador (k, métrica, ponderación, regla).
+
+Precisión y matriz de confusión.
+
+Manejo de I/O: Crea el directorio si no existe y captura excepciones de escritura.
+
+Con esto, ExperimentManager ofrece una API sencilla para:
+
+Dividir datasets (con o sin aleatoriedad).
+
+Persistir conjuntos de entrenamiento/prueba.
+
+Ejecutar y documentar experimentos KNN.
