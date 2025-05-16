@@ -1,8 +1,8 @@
-***PRC-6: Sistema de Gestión de Experimentos KNN
-Práctica 6 – Diagramas UML y Generación Aleatoria de Conjuntos Train/Test ***
+***PRC-6: Sistema de Gestión de Experimentos KNN***
+***Práctica 6 – Diagramas UML y Generación Aleatoria de Conjuntos Train/Test ***
 
 
-1. Objetivos
+***1. Objetivos***
 
 Modelar mediante diagramas UML los procesos clave del sistema de clasificación k-NN:
 
@@ -15,7 +15,7 @@ Implementar en Java la generación reproducible de conjuntos de entrenamiento y 
 Organizar la práctica en un repositorio independiente (PRC-6).
 
 
-2. Diagramas de Actividad y Estado:
+***2. Diagramas de Actividad y Estado:***
 
 Situados en este repositorio en:
 
@@ -23,7 +23,7 @@ Situados en este repositorio en:
 - *De estado*: /docs/diagrams/deEstado
 
 
-3. Implementación Java: ExperimentManager
+***3. Implementación Java: ExperimentManager***
 
 La clase ExperimentManager dispone de los siguientes atributos internos:
 
