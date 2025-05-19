@@ -69,24 +69,7 @@ Ampliar el sistema con la implementación de un clasificador k-NN configurable y
 
 ---
 
-## ✅ Conclusiones
 
-- Se ha logrado un sistema modular y extensible, con componentes bien separados y documentados.
-- Los diagramas UML aportan una visión clara de los flujos del sistema y su comportamiento.
-- La implementación es flexible y permite realizar múltiples experimentos modificando fácilmente parámetros y datos.
-
----
-
-## 🛠️ Herramientas utilizadas
-
-- Python 3.x
-- Bibliotecas:
-  - `pandas`, `numpy` (para procesamiento de datos)
-  - `matplotlib` (para visualización si se amplía)
-- Herramientas UML:
-  - PlantUML y Lucidchart (según diagrama)
-
----
 
 ## 📜 Licencia
 
@@ -114,18 +97,6 @@ Diseñar un sistema capaz de gestionar experimentos reproducibles con un clasifi
   - Clase que encapsula la carga, almacenamiento y manipulación de datos.
   - Soporta CSV y estructuras internas para atributos y clases.
 
-### Diagramas UML asociados
-
-📂 `/docs/diagrams/deActividad`:  
-- División aleatoria de datos  
-- Ejecución del experimento  
-- Generación de informe  
-
-📂 `/docs/diagrams/deEstado`:  
-- Estados del gestor de experimentos  
-- Flujo de transición entre carga, ejecución y análisis  
-
----
 
 ## 🧠 PRC-7 – Clasificador k-NN y modelado detallado
 
